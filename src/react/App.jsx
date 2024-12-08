@@ -5,21 +5,37 @@ import CloudflareDeployment from './components/CloudflareDeployment';
 
 const App = () => {
   const [currentView, setCurrentView] = useState('serviceSelection');
+  const [sharedState, setSharedState] = useState({});
 
-  const renderView = () => {
-    switch (currentView) {
-      case 'serviceSelection':
-        return <ServiceSelection setView={setCurrentView} />;
-      case 'awsDeployment':
-        return <AWSDeployment setView={setCurrentView} />;
-      case 'cloudflareDeployment':
-        return <CloudflareDeployment setView={setCurrentView} />;
-      default:
-        return <div>Unknown View</div>;
-    }
+  const handleViewChange = (view) => {
+    setCurrentView(view);
   };
 
-  return <div>{renderView()}</div>;
+  const handleStateUpdate = (key, value) => {
+    setSharedState((prevState) => ({ ...prevState, [key]: value }));
+  };
+
+  return (
+    <div>
+      {currentView === 'serviceSelection' && (
+        <ServiceSelection setView={handleViewChange} />
+      )}
+      {currentView === 'awsDeployment' && (
+        <AWSDeployment
+          setView={handleViewChange}
+          sharedState={sharedState}
+          updateState={handleStateUpdate}
+        />
+      )}
+      {currentView === 'cloudflareDeployment' && (
+        <CloudflareDeployment
+          setView={handleViewChange}
+          sharedState={sharedState}
+          updateState={handleStateUpdate}
+        />
+      )}
+    </div>
+  );
 };
 
 export default App;

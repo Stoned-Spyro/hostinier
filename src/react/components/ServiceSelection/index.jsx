@@ -1,4 +1,5 @@
 import React from 'react';
+import './ServiceSelection.css';
 
 const ServiceSelection = ({ setView }) => {
   const handleServiceSelect = (service) => {
@@ -10,7 +11,7 @@ const ServiceSelection = ({ setView }) => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Select a Service</h1>
       <button onClick={() => handleServiceSelect('aws')}>AWS</button>
       <button onClick={() => handleServiceSelect('cloudflare')}>Cloudflare</button>
