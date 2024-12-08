@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="index.css" />
+  <title>Select Service</title>
+</head>
+<body>
+  <h1>Choose a Cloud Service</h1>
+  <button id="awsButton">AWS</button>
+  <button id="cloudflareButton">Cloudflare</button>
+  <script>
+    document.getElementById('awsButton').addEventListener('click', () => {
+      window.api.chooseService('aws');
+    });
+
+    document.getElementById('cloudflareButton').addEventListener('click', () => {
+      window.api.chooseService('cloudflare');
+    });
+  </script>
+</body>
+</html>
