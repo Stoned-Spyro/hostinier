@@ -4,7 +4,8 @@ import AWSDeployment from './components/AWSDeployment';
 import CloudflareDeployment from './components/CloudflareDeployment';
 
 const App = () => {
-  const [currentView, setCurrentView] = useState('serviceSelection');
+  //const [currentView, setCurrentView] = useState('serviceSelection');
+  const [currentView, setCurrentView] = useState('awsDeployment');
   const [sharedState, setSharedState] = useState({});
 
   const handleViewChange = (view) => {
@@ -16,7 +17,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className='mainContainer'>
       {currentView === 'serviceSelection' && (
         <ServiceSelection setView={handleViewChange} />
       )}

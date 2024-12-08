@@ -1,11 +1,13 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const { checkAWSCLI, deployToAWS } = require('./backend/aws');
 const { deployToCloudflare } = require('./backend/cloudflare');
 
+require('electron-reload')(path.join(__dirname, '../'), {
+  electron: path.join(__dirname, '../node_modules/.bin/electron'),
+  hardResetMethod: 'exit',
+});
 
-let mainWindow;
-let deploymentWindow;
 
 const sharedState = {
   selectedService: null,
@@ -17,9 +19,16 @@ const sharedState = {
 
 const createWindow = () => {
   // Create the browser window.
-  mainWindow = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#1f212b',
+      symbolColor: '#74b1be',
+      height: 20
+
+    },
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true, // Ensure context isolation is enabled
@@ -29,43 +38,7 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, '/ui/index.html'));
   mainWindow.on('closed', () => (mainWindow = null));
-};
-
-const createDeploymentWindow = (service) => {
-  let htmlFile
-  switch(service){
-    case 'aws':{
-      htmlFile = './src/ui/aws-deploy.html'
-      break;
-    };
-    case 'cloudflare':{
-      htmlFile = './src/ui/cloudflare-deploy.html';
-      break;
-    };
-    default: {
-      console.error('unknown service');
-    }
-
-  }
-
-  if(!htmlFile){
-    return;
-  }
-
-  deploymentWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
-  });
-
-  deploymentWindow.loadFile(htmlFile);
-  deploymentWindow.on('closed', () => {
-    deploymentWindow = null;
-  });
+  mainWindow.webContents.openDevTools() 
 };
 
 // This method will be called when Electron has finished
@@ -83,17 +56,7 @@ app.whenReady().then(() => {
   });
 });
 
-ipcMain.on('choose-service', (event, service) => {
-  mainWindow.close();
-  createDeploymentWindow(service);
-});
 
-ipcMain.handle('select-folder', async () => {
-  const result = await dialog.showOpenDialog(deploymentWindow, {
-    properties: ['openDirectory'],
-  });
-  return result.canceled ? null : result.filePaths[0];
-});
 
 ipcMain.handle('deploy-app', async (event, { service, config, folderPath }) => {
   try {
@@ -107,15 +70,32 @@ ipcMain.handle('deploy-app', async (event, { service, config, folderPath }) => {
     return { error: error.message };
   }
 });
-ipcMain.on('go-back', () => {
-  if (deploymentWindow) {
-    deploymentWindow.close();
-    createWindow();
+
+ipcMain.handle('choose-folder', async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openDirectory'],
+  });
+
+  if (result.canceled) {
+    return null;
   }
+
+  return result.filePaths[0];
 });
 
-// Provide shared state to renderer
-ipcMain.handle('get-shared-state', () => sharedState);
+ipcMain.handle('choose-file', async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [{ name: 'HTML Files', extensions: ['html'] }],
+  });
+
+  if (result.canceled) {
+    return null;
+  }
+
+  return result.filePaths[0];
+});
+
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.

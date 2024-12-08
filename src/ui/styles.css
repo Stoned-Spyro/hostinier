@@ -1,0 +1,15 @@
+html{
+    background-color: #2f3241;
+    color: #74b1be;
+}
+
+*{
+    margin: 0;
+}
+
+nav{
+    height: 35px;
+    width: 100%;
+    -webkit-app-region: drag;
+    background-color: #1f212b;
+}

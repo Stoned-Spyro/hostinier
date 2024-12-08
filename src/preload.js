@@ -3,9 +3,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
-  chooseService: (service) => ipcRenderer.send('choose-service', service),
-  selectFolder: () => ipcRenderer.invoke('select-folder'),
-  deployApp: (params) => ipcRenderer.invoke('deploy-app', params),
-  goBack: () => ipcRenderer.send('go-back'),
-  getSharedState: () => ipcRenderer.invoke('get-shared-state'),
+  deployApp: async (params) => ipcRenderer.invoke('deploy-app', params),
+  chooseFolder: async () => ipcRenderer.invoke('choose-folder'),
+  chooseFile: async () => ipcRenderer.invoke('choose-file'),
 });
