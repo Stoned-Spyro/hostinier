@@ -3,7 +3,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
-  deployApp: async (params) => ipcRenderer.invoke('deploy-app', params),
+  deployToS3: async (data) => await ipcRenderer.invoke('deploy-to-s3', data),
   chooseFolder: async () => ipcRenderer.invoke('choose-folder'),
   chooseFile: async () => ipcRenderer.invoke('choose-file'),
+  checkAWSCLI: async () => await ipcRenderer.invoke('check-aws-cli'),
 });

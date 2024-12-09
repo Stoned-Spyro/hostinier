@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 
-const CloudflareDeployment = ({ setView, sharedState, updateState }) => {
-  const [config, setConfig] = useState(sharedState.cloudflareConfig || {});
+const CloudflareDeployment = ({ setView }) => {
+
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setConfig((prev) => ({ ...prev, [name]: value }));
-    updateState('cloudflareConfig', { ...config, [name]: value });
+    
   };
 
   const handleDeploy = () => {

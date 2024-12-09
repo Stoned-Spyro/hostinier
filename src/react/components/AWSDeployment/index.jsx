@@ -1,10 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AWSDeployment.css';
+import { useGlobalContext } from '../../context/GlobalContext';
 
-const AWSDeployment = ({ setView, sharedState, updateState }) => {
-  const [config, setConfig] = useState(sharedState.awsConfig || {});
+const AWSDeployment = ({ setView }) => {
+  const { projectPath } = useGlobalContext();
+  const [bucketName, setBucketName] = useState('');
+  const [region, setRegion] = useState('');
   const [indexFilePath, setIndexFilePath] = useState('');
   const [errorFilePath, setErrorFilePath] = useState('');
+  const [status, setStatus] = useState('');
+  const [awsCLIError, setAwsCLIError] = useState('');
+  const [showModal, setShowModal] = useState(false);
+
+  const checkAWSCLI = async () => {
+    const result = await window.api.checkAWSCLI();
+    if (!result.success) {
+      setAwsCLIError(result.message);
+      setShowModal(true);
+    }
+  };
+
+  useEffect(() => {
+    checkAWSCLI();
+  }, []);
+
+  const handleDeploy = async () => {
+    if (!bucketName || !region || !indexFilePath || !projectPath) {
+      setStatus('Please fill all required fields.');
+      return;
+    }
+
+    await checkAWSCLI();
+
+    setStatus('Deploying...');
+    const result = await window.api.deployToS3({
+      bucketName,
+      region,
+      indexFilePath,
+      errorFilePath,
+      projectPath,
+    });
+
+    if (result.success) {
+      setStatus('Deployment successful!');
+    } else {
+      setStatus(`Deployment failed: ${result.error}`);
+    }
+  };
 
   const handleChooseIndexFile = async () => {
     const filePath = await window.api.chooseFile();
@@ -20,24 +62,29 @@ const AWSDeployment = ({ setView, sharedState, updateState }) => {
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setConfig((prev) => ({ ...prev, [name]: value }));
-    updateState('awsConfig', { ...config, [name]: value });
-  };
-
-  const handleDeploy = () => {
-    window.api.deployApp(config).then((response) => {
-      if (response.error) {
-        alert(`Error: ${response.error}`);
-      } else {
-        alert('Deployment Successful!');
-      }
-    });
-  };
-
   return (
     <div className="awsContainer">
+      {awsCLIError && showModal && (
+        <div className="modal">
+          <button className="closeButton" onClick={() => setShowModal(false)}>
+            X
+          </button>
+          <h1>AWS CLI Not Ready</h1>
+          <p>{awsCLIError}</p>
+          <p>
+            Please ensure that the AWS CLI is installed and configured on your
+            system. For installation instructions, visit{' '}
+            <a
+              href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              AWS CLI Installation Guide
+            </a>
+            .
+          </p>
+        </div>
+      )}
       <h1 className="serviceName">AWS Deployment</h1>
       <p style={{ marginBottom: '16px' }}>
         Please note, to procced deployment, aws CLI must be installed and setted
@@ -49,8 +96,10 @@ const AWSDeployment = ({ setView, sharedState, updateState }) => {
           <input
             className="inputField"
             name="region"
-            value={config.region || ''}
-            onChange={handleInputChange}
+            value={region}
+            onChange={(e) => {
+              setRegion(e.target.value);
+            }}
           />
         </div>
         <div className="inputElement">
@@ -58,8 +107,10 @@ const AWSDeployment = ({ setView, sharedState, updateState }) => {
           <input
             className="inputField"
             name="bucketName"
-            value={config.bucketName || ''}
-            onChange={handleInputChange}
+            value={bucketName}
+            onChange={(e) => {
+              setBucketName(e.target.value);
+            }}
           />
         </div>
         <div className="inputFileElement">
@@ -71,6 +122,7 @@ const AWSDeployment = ({ setView, sharedState, updateState }) => {
           {errorFilePath && <p>{errorFilePath}</p>}
         </div>
       </div>
+      {status && <p style={{ color: '#d42626' }}>{status}</p>}
       <div className="buttonContainer">
         <button onClick={() => setView('serviceSelection')}>Back</button>
         <button onClick={handleDeploy}>Deploy</button>
