@@ -81,7 +81,7 @@ const CloudflareDeployment = ({ setView }) => {
       )}
       <h1 className="serviceName">Deploy to Cloudflare</h1>
       <div className="inputForm">
-        <div className="inputElement">
+        <div className="cloudlfareInputLabel">
           <label className="inputLabel">Project Name*:</label>
           <input
             type="text"
@@ -90,7 +90,7 @@ const CloudflareDeployment = ({ setView }) => {
             onChange={(e) => setProjectName(e.target.value)}
           />
         </div>
-        <div className="inputElement">
+        <div className="cloudlfareInputLabel">
           <label className="inputLabel">Account ID*:</label>
           <input
             type="text"
@@ -99,7 +99,7 @@ const CloudflareDeployment = ({ setView }) => {
             onChange={(e) => setAccountId(e.target.value)}
           />
         </div>
-        <div className="inputElement">
+        <div className="cloudlfareInputLabel">
           <label className="inputLabel">API Token*:</label>
           <input
             type="text"

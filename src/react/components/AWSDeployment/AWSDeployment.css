@@ -12,7 +12,6 @@
 
 .inputLabel{
     margin-right: 8px;
-    width: 150px;
 }
 
 .inputField{
@@ -25,9 +24,6 @@
 
 .inputElement{
     margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .inputFileElement {
