@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 100px;
+    margin-top: 70px;
 }
 
 .serviceName{
@@ -12,6 +12,7 @@
 
 .inputLabel{
     margin-right: 8px;
+    width: 100px;
 }
 
 .inputField{
@@ -24,6 +25,9 @@
 
 .inputElement{
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .inputFileElement {
@@ -89,4 +93,20 @@
 
   .closeButton:hover {
     background-color: #470404;
+  }
+
+  .inputSelect{
+    border: 2px solid #0e0f13;
+    border-radius: 5px;
+    width: 255px;
+    height: 28px;
+    outline: none;
+  }
+
+  .appUrl{
+    color: #74b1be;
+  }
+
+  .appUrl:hover {
+    color: #428b9b;
   }

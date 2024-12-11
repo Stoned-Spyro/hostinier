@@ -1,0 +1,113 @@
+.cloudflareContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+}
+
+
+.serviceName{
+    margin-bottom: 36px;
+}
+
+.inputLabel{
+    margin-right: 8px;
+    width: 100px;
+}
+
+.inputField{
+    border: 2px solid #0e0f13;
+    border-radius: 5px;
+    outline: none;
+    width: 250px;
+    height: 20px;
+}
+
+.inputElement{
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputFileElement {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputFileElement button{
+    margin-right: 8px;
+}
+
+.inputFileElement p {
+    line-height: 55px;
+}
+
+.inputForm {
+    margin-bottom: 24px;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    color:#0e7e97
+  }
+  
+  .modal h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  
+  .modal p {
+    margin: 10px 0;
+  }
+  
+  .modal a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .modal a:hover {
+    text-decoration: underline;
+  }
+
+  .closeButton {
+    background-color: #a00909;
+    position: absolute;
+    top:5px;
+    right: 5px;
+    padding: 5px 10px;
+  }
+
+  .closeButton:hover {
+    background-color: #470404;
+  }
+
+  .inputSelect{
+    border: 2px solid #0e0f13;
+    border-radius: 5px;
+    width: 255px;
+    height: 28px;
+    outline: none;
+  }
+
+  .appUrl{
+    color: #74b1be;
+  }
+
+  .appUrl:hover {
+    color: #428b9b;
+  }

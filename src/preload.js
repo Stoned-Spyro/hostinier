@@ -7,4 +7,7 @@ contextBridge.exposeInMainWorld('api', {
   chooseFolder: async () => ipcRenderer.invoke('choose-folder'),
   chooseFile: async () => ipcRenderer.invoke('choose-file'),
   checkAWSCLI: async () => await ipcRenderer.invoke('check-aws-cli'),
+  chooseCustomPolicy: async () => await ipcRenderer.invoke('choose-custom-policy'),
+  checkCloudflareRequirements: async () => await ipcRenderer.invoke('check-cloudflare-requirements'),
+  deployToCloudflare: async (data) => await ipcRenderer.invoke('deploy-to-cloudflare', data)
 });
